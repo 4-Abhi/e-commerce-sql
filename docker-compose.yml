@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+    backend:
+      build: ./backend
+      ports:
+      - "9001:9001"
+
+
+    mysql:
+      image: mysql:8.0
+      restart: always
+
+      environment:
+        MYSQL_ROOT_PASSWORD: root
+        MYSQL_DATABASE: mydb
+        MYSQL_USER: user
+        MYSQL_PASSWORD: userpass
+
+volumes:
+  mysql-data:
+
