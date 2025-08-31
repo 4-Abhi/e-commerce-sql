@@ -44,8 +44,7 @@ export const loginController = asyncHandler(async (req, res) => {
   }
 
   const user = await User.findOne({ where: { email: value.email } });
-  console.log("User is", user);
-
+ 
   if (!user) {
     throw new ApiError(404, "User not found");
   }

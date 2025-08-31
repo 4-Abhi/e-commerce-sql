@@ -1,10 +1,24 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../db/index.js";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
 
 class User extends Model {
+  // For Address Mapping
+  static associate(models) {
+    // Address Model
+    User.hasMany(models.Address, {
+      foreignKey: "userId",
+      as: "addresses", // optional alias (useful when querying)
+    });
+
+    User.belongsTo(models.UserRole, {
+      foreignKey: "roleId",
+    });
+  }
+
   // Generate Access Token
+  // instance method
   generateAccessToken() {
     return jwt.sign(
       {
@@ -76,6 +90,16 @@ User.init(
     },
     coverImage: {
       type: DataTypes.STRING,
+    },
+    roleId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: "Roles", // table name (make sure it matches your Role model tableName)
+        key: "id",
+      },
+      onUpdate: "CASCADE",
+      onDelete: "RESTRICT", // or "CASCADE" if you want users deleted when a role is deleted
     },
   },
 
