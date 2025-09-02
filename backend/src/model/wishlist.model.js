@@ -1,25 +1,26 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../db/index.js";
 
-class Wishlist extends Model {
+class WishList extends Model {
   static associate(models) {
-    Wishlist.belongsTo(models.User, {
+    WishList.belongsTo(models.User, {
       foreignKey: "userId",
       as: "user",
     });
-//    This is also correct
-    // Wishlist.hasMany(models.WishlistItem, {
+    //   This is also correct
+    // WishList.hasMany(models.WishListItem, {
     //   foreignKey: "wishListId",
+    //   as: "wishListItem"
     // });
 
-    Wishlist.belongsToMany(models.Product, {
-      through: models.WishlistItem,
+    WishList.belongsToMany(models.Product, {
+      through: models.WishListItem,
       foreignKey: "wishlistId",
       as: "products",
     });
   }
 }
-Wishlist.init(
+WishList.init(
   {
     userId: {
       type: DataTypes.INTEGER,
@@ -28,9 +29,9 @@ Wishlist.init(
   },
   {
     sequelize,
-    tableName: "Wishlist",
-    modelName: "Wishlist",
+    tableName: "WishList",
+    modelName: "WishList",
     timestamps: true,
   }
 );
-export default Wishlist;
+export default WishList;

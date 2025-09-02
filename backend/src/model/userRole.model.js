@@ -1,4 +1,4 @@
-import { Model } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "../db/index.js";
 
 class UserRole extends Model {
@@ -25,7 +25,7 @@ UserRole.init(
   {
     sequelize,
     modelName: "UserRole",
-    tableName: "UserRoles",
+    tableName: "UserRole",
     timestamps: true,
   }
 );

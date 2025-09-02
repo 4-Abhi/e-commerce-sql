@@ -3,12 +3,15 @@ import sequelize from "../db/index.js";
 
 class Order extends Model{
    static associate(models){
+    
     Order.belongsTo(models.User, {
-        foreignKey: "userId"
+        foreignKey: "userId",
+        as:"user"
     })
 
     Order.hasMany(models.OrderItem , {
-        foreignKey:"orderId"
+        foreignKey:"orderId",
+        as:"orderItem"
     })
    }
 

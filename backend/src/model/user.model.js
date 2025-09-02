@@ -6,14 +6,27 @@ import jwt from "jsonwebtoken";
 class User extends Model {
   // For Address Mapping
   static associate(models) {
+    // Order
+    User.hasMany(models.Order, {
+      foreignKey: "userId",
+      as: "orders",
+    });
     // Address Model
     User.hasMany(models.Address, {
       foreignKey: "userId",
       as: "addresses", // optional alias (useful when querying)
     });
 
+    // User Role
     User.belongsTo(models.UserRole, {
       foreignKey: "roleId",
+      as: "roles",
+    });
+
+    // User rating
+    User.hasMany(models.Rating, {
+      foreignKey: "userId",
+      as: "ratings",
     });
   }
 
@@ -95,7 +108,7 @@ User.init(
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
-        model: "Roles", // table name (make sure it matches your Role model tableName)
+        model: "UserRole", // table name (make sure it matches your Role model tableName)
         key: "id",
       },
       onUpdate: "CASCADE",
@@ -107,6 +120,7 @@ User.init(
     sequelize,
     modelName: "User",
     tableName: "users",
+    timestamps: true,
   }
 );
 

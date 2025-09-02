@@ -5,17 +5,14 @@ class Address extends Model {
   static associate(models) {
     Address.belongsTo(models.User, {
       foreignKey: "userId",
+      as:"users"
     });
   }
 }
 
 Address.init(
   {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      autoIncrement: true,
-    },
+
     addressOne: {
       type: DataTypes.STRING,
       allowNull: false,

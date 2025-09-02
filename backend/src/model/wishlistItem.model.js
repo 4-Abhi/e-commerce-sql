@@ -1,14 +1,14 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../db/index.js";
 
-class WishlistItem  extends Model{
+class WishListItem  extends Model{
     static associate(models){
-        WishlistItem.belongsTo(models.Wishlist , {
-            foreignKey:"wishlistId",
-            as: "wishlist"
+        WishListItem.belongsTo(models.WishList , {
+            foreignKey:"wishListId",
+            as:"wishList"
         })
        
-        WishlistItem.belongsTo(models.Product , {
+        WishListItem.belongsTo(models.Product , {
             foreignKey:"productId",
             as:"product"
         })
@@ -17,7 +17,7 @@ class WishlistItem  extends Model{
 
 }
 
-WishlistItem.init({
+WishListItem.init({
     wishListId:{
         type: DataTypes.INTEGER,
         allowNull: false
@@ -34,3 +34,5 @@ WishlistItem.init({
     timestamps: true
 
 })
+
+export default WishListItem

@@ -1,22 +1,25 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "../db/index.js";
 
-class OrderItem extends Model {
+class Rating extends Model {
   static associate(models) {
-    OrderItem.belongsTo(models.Order, {
-      foreignKey: "orderId",
-      as: "order",
+    // Rating Belong to the user
+    Rating.belongsTo(models.User, {
+      foreignKey: "userId",
+      as: "user",
     });
-    OrderItem.belongsTo(models.Product, {
+
+    // Rating belong to one Product
+    Rating.belongsTo(models.Product, {
       foreignKey: "productId",
       as: "product",
     });
   }
 }
 
-OrderItem.init(
+Rating.init(
   {
-    orderId: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -24,21 +27,18 @@ OrderItem.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    quantity: {
+    ratingValue: {
       type: DataTypes.INTEGER,
       allowNull: false,
-    },
-    price: {
-      type: DataTypes.FLOAT,
-      allowNull: false,
+      validate: { min: 1, max: 5 },
     },
   },
   {
     sequelize,
-    tableName: "OrderItems",
-    modelName: "OrderItems",
+    tableName: "Rating",
+    modelName: "Rating",
     timestamps: true,
   }
 );
 
-export default OrderItem;
+export default Rating;
