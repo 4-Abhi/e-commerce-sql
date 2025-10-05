@@ -1,9 +1,10 @@
+import { Op } from "sequelize";
 import User from "../model/user.model.js";
-import { login } from "../services/user.services.js";
 import { ApiError } from "../utils/apiError.js";
 import { ApiResponse } from "../utils/apiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { loginSchema, userSchema } from "../validators/userValidators.js";
+import { uploadCloud } from "../utils/cloudinary.js";
 
 const generateAccessTokenandRefreshToken = async (userId) => {
   try {
@@ -25,17 +26,40 @@ const generateAccessTokenandRefreshToken = async (userId) => {
   }
 };
 
-export const signUpController = asyncHandler(async (req, res) => {
+// Register
+export const registerController = asyncHandler(async (req, res) => {
   const { error, value } = userSchema.validate(req.body, { abortEarly: false });
+
   if (error) {
     throw new ApiError(400, error);
   }
 
-  const user = await login(value);
+  const isUserExists = await User.findOne({
+    where: {
+      [Op.or]: [{ username: value.username }, { email: value.email }],
+    },
+  });
+
+  if (isUserExists) {
+    throw new ApiError(409, "User already exit");
+  }
+  const avatarFilePath = req.files?.avatar?.[0].path;
+  const avatar = avatarFilePath ? await uploadCloud(avatarFilePath) : "";
+
+  const user = await User.create({
+    username: value.username,
+    email: value.email,
+    password: value.password,
+    fullName: value.fullName,
+    avatar: avatar.url || "",
+    roleId: value.roleId,
+  });
   return res
     .status(201)
     .json(new ApiResponse(200, user, "User register Successfully"));
 });
+
+// Login Controller
 
 export const loginController = asyncHandler(async (req, res) => {
   const { error, value } = loginSchema.validate(req.body);
@@ -44,7 +68,7 @@ export const loginController = asyncHandler(async (req, res) => {
   }
 
   const user = await User.findOne({ where: { email: value.email } });
- 
+
   if (!user) {
     throw new ApiError(404, "User not found");
   }

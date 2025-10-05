@@ -12,7 +12,8 @@ class UserRole extends Model {
 
 UserRole.init(
   {
-    id: {   // Explicity Added the Id
+    id: {
+      // Explicity Added the Id
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
@@ -20,6 +21,7 @@ UserRole.init(
     type: {
       type: DataTypes.ENUM("user", "admin", "superAdmin"),
       allowNull: false,
+      unique: true,
     },
   },
   {

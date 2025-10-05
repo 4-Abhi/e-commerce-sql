@@ -20,7 +20,6 @@ import WishListItem from "../model/wishlistItem.model.js";
 
 // Collect all models
 const models = {
-
   User,
   Address,
   UserRole,
