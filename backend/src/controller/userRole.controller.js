@@ -22,6 +22,4 @@ export const getAllUserRole = asyncHandler(async(req, res)=>{
     return res
     .status(201)
     .json(new ApiResponse(200, getRole, "Get All UserRole Successfully"));
-
-
 })

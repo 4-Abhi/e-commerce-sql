@@ -16,4 +16,6 @@ sequelize.authenticate()
   })
   .catch(err => console.error("❌ DB connection error:", err));
 
+  // Then Sequelize drops and recreates all your tables every time your app restarts.
+// sequelize.sync({force: true});
 sequelize.sync();

@@ -105,3 +105,9 @@ export const loginController = asyncHandler(async (req, res) => {
       )
     );
 });
+
+
+export const getAllUser = asyncHandler(async (req , res )=>{
+  const users = await User.findAll();
+  return res.status(201).json(new ApiResponse(200 , users , "Users fetch successfully"))
+})

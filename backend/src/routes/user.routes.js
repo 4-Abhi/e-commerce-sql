@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  getAllUser,
   loginController,
   registerController,
 } from "../controller/user.controller.js";
@@ -14,5 +15,7 @@ router.route("/register").post(
   ]),
   registerController
 );
+
+router.route("/getAlluser").get(getAllUser)
 
 export default router;

@@ -14,6 +14,8 @@ import UserRole from "../model/userRole.model.js"
 import Rating from "../model/rating.model.js"
 import WishList from '../model/wishlist.model.js'
 import WishListItem from "../model/wishlistItem.model.js";
+import ProductImage  from "../model/productImage.model.js"
+import ProductVariant from "../model/productVariant.model.js"
  
 
 
@@ -34,7 +36,10 @@ const models = {
   CartItem,
   Rating,
   WishList,
-  WishListItem
+  WishListItem,
+  ProductImage,
+  ProductVariant,
+
 };
 
 // Run associations

@@ -7,15 +7,13 @@ class WishList extends Model {
       foreignKey: "userId",
       as: "user",
     });
-    //   This is also correct
-    // WishList.hasMany(models.WishListItem, {
-    //   foreignKey: "wishListId",
-    //   as: "wishListItem"
-    // });
+     
 
+     // Many-to-Many: WishList ↔ Product through WishListItem
     WishList.belongsToMany(models.Product, {
-      through: models.WishListItem,
-      foreignKey: "wishlistId",
+      through: models.WishListItem, // join table
+      foreignKey: "wishlistId",     // column in WishListItem
+      otherKey: "productId",        // column in WishListItem
       as: "products",
     });
   }

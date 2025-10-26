@@ -11,6 +11,7 @@ class User extends Model {
       foreignKey: "userId",
       as: "orders",
     });
+    
     // Address Model
     User.hasMany(models.Address, {
       foreignKey: "userId",
@@ -27,6 +28,12 @@ class User extends Model {
     User.hasMany(models.Rating, {
       foreignKey: "userId",
       as: "ratings",
+    });
+
+    // 
+      User.hasMany(models.WishList, {
+      foreignKey: "userId",
+      as: "wishList",
     });
   }
 

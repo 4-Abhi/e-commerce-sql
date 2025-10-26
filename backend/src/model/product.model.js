@@ -1,9 +1,14 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../db/index.js";
+import slugify from "slugify";
 
 class Product extends Model {
   static associate(models) {
-    Product.belongsTo(models.Category, { foreignKey: "categoryId" });
+    // ✅ A product belongs to a category
+    Product.belongsTo(models.Category, {
+      foreignKey: "categoryId",
+      as: "category",
+    });
 
     // One product can have many attributes
     Product.hasMany(models.ProductAttribute, { foreignKey: "productId" });
@@ -20,16 +25,33 @@ class Product extends Model {
       as: "ratings",
     });
 
-    // WishList
-    // Product.hasMany(models.WishListItem , {
-    //   foreignKey:"productId",
-    //   as:"product"
-    // })
+    // ✅ Wishlist relation (many-to-many)
 
     Product.belongsToMany(models.WishList, {
       through: models.WishListItem,
       foreignKey: "productId",
-      as: "wishLists",
+      otherKey: "wishlistId",
+      as: "wishlists",
+    });
+
+    // ✅ A product can have many images
+    Product.hasMany(models.ProductImage, {
+      foreignKey: "productId",
+      as: "images",
+      onDelete: "CASCADE",
+    });
+
+    // Product has many size variants
+    Product.hasMany(models.ProductVariant, {
+      foreignKey: "productId",
+      as: "sizes",
+    });
+
+    // Self reference for color variants
+    Product.hasMany(models.Product, {
+      foreignKey: "parentId",
+      as: "variants",
+      onDelete: "CASCADE",
     });
   }
 }
@@ -41,7 +63,7 @@ Product.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    name: {
+    title: {
       type: DataTypes.STRING,
       allowNull: false,
     },
@@ -49,6 +71,15 @@ Product.init(
       type: DataTypes.FLOAT,
       allowNull: false,
     },
+    discountPrice: {
+      type: DataTypes.FLOAT,
+      allowNull: true,
+    },
+    color: {
+      type: DataTypes.STRING,
+      allowNull: true, // like "Olive Green"
+    },
+
     description: {
       type: DataTypes.TEXT,
     },
@@ -60,12 +91,23 @@ Product.init(
       type: DataTypes.STRING,
       unique: true,
     },
+    parentId: {
+      type: DataTypes.INTEGER,
+      allowNull: true, // used for color variants
+    },
   },
   {
     sequelize,
     modelName: "Product",
     tableName: "Products",
     timestamps: true,
+    hooks: {
+      beforeValidate: (product) => {
+        if (product.title) {
+          product.slug = slugify(product.title, { lower: true });
+        }
+      },
+    },
   }
 );
 

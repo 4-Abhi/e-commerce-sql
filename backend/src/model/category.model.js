@@ -11,8 +11,14 @@ class Category extends Model {
       foreignKey: "parentId",
     });
 
+    Category.belongsTo(models.Category, {
+      as: "parent",
+      foreignKey: "parentId",
+    });
+
     // A category can have many Product
     Category.hasMany(models.Product, {
+      as: "product",
       foreignKey: "categoryId",
     });
 
@@ -38,6 +44,11 @@ Category.init(
     parentId: {
       type: DataTypes.INTEGER,
       allowNull: true,
+    },
+    level: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1, // 1: main, 2: subcategory, 3: product category
     },
     icon: {
       type: DataTypes.STRING,
